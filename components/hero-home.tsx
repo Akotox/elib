@@ -6,6 +6,123 @@ import Avatar03 from "@/public/images/avatar-03.jpg";
 import Avatar04 from "@/public/images/avatar-04.jpg";
 import Avatar05 from "@/public/images/avatar-05.jpg";
 import Avatar06 from "@/public/images/avatar-06.jpg";
+import { ProductCard } from "./ProductCard";
+import { Product } from "@prisma/client";
+
+
+const mockProducts: Product[] = [
+  {
+    id: '1',
+    name: 'Digital Art Pack Vol. 1',
+    priceInCents: 1999,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'A premium collection of high-res digital artworks.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '2',
+    name: 'E-book: Learn JavaScript',
+    priceInCents: 1499,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'A complete guide to mastering JavaScript in 30 days.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '3',
+    name: 'Music Loops Vol. 2',
+    priceInCents: 1299,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'Royalty-free music loops for your next project.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '4',
+    name: 'Mobile UI Kit',
+    priceInCents: 2499,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'A mobile-first UI kit with hundreds of components.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '5',
+    name: 'Video LUTs Pack',
+    priceInCents: 999,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'Color grading LUTs for cinematic video editing.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '6',
+    name: 'Resume Template Bundle',
+    priceInCents: 799,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'Stand out with these professionally designed resumes.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '7',
+    name: 'Coding Fonts Pack',
+    priceInCents: 499,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'A curated pack of fonts optimized for developers.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '8',
+    name: 'iOS App Icon Set',
+    priceInCents: 1299,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'A complete app icon set tailored for iOS apps.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '9',
+    name: 'Notion Productivity Templates',
+    priceInCents: 599,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'Boost your workflow with these Notion templates.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '10',
+    name: 'AI Prompt Library',
+    priceInCents: 899,
+    filePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    imagePath: 'https://cdn.pixabay.com/photo/2015/11/19/21/10/glasses-1052010_640.jpg',
+    description: 'Hundreds of prompts to supercharge your AI outputs.',
+    isAvailableForPurchase: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+]
+
 
 export default function HeroHome() {
   return (
@@ -110,7 +227,7 @@ export default function HeroHome() {
             </div>
           </div>
           {/* Hero image */}
-          <div
+          {/* <div
             className="mx-auto max-w-3xl"
             data-aos="zoom-y-out"
             data-aos-delay={600}
@@ -146,9 +263,20 @@ export default function HeroHome() {
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
+          <ProductSuspense products={mockProducts} />
         </div>
       </div>
     </section>
+  );
+}
+
+function ProductSuspense({ products }: { products: Product[] }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {products.map((product) => (
+        <ProductCard key={product.id} {...product} />
+      ))}
+    </div>
   );
 }
