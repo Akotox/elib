@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Logo from "./logo";
+import { Button } from "./button";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 export default function Header() {
   return (
@@ -26,24 +28,30 @@ export default function Header() {
                 href="/signin"
                 className="btn-sm bg-white text-gray-800 shadow-sm hover:bg-gray-50"
               >
-                My Books
+                My e-Books
               </Link>
             </li>
+
             <li>
-              <Link
-                href="/signin"
-                className="btn-sm bg-white text-gray-800 shadow-sm hover:bg-gray-50"
-              >
-                Login
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/signup"
-                className="btn-sm bg-gray-800 text-gray-200 shadow-sm hover:bg-gray-900"
-              >
-                Admin
-              </Link>
+              <SignedOut>
+                <Button
+                  asChild
+                  className="btn-sm bg-gray-800 text-gray-200 shadow-sm hover:bg-gray-900"
+                >
+                  <SignInButton />
+                </Button>
+              </SignedOut>
+
+              <SignedIn>
+                <div className="mt-2">
+                <UserButton
+                  appearance={{
+                    elements: { userButtonAvatarBox: "size-full" },
+                  }}
+                />
+                </div>
+                
+              </SignedIn>
             </li>
           </ul>
         </div>
