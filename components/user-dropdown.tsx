@@ -9,17 +9,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SignOutButton } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
-import { RiSettingsLine, RiTeamLine, RiLogoutBoxLine } from "@remixicon/react";
+import {  RiLogoutBoxLine } from "@remixicon/react";
 
-export default function UserDropdown() {
+export default async function UserDropdown() {
+  const { userId, redirectToSignIn } = await auth();
+  
+    if (userId == null) return redirectToSignIn();
+  
+    const user = await currentUser();
+  
+    if (user == null) return redirectToSignIn();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
           <Avatar className="size-8">
             <AvatarImage
-              src="https://res.cloudinary.com/dlzlfasou/image/upload/v1741345506/user_sam4wh.png"
+              src={user.imageUrl}
               width={32}
               height={32}
               alt="Profile image"
@@ -31,27 +40,12 @@ export default function UserDropdown() {
       <DropdownMenuContent className="max-w-64" align="end">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="truncate text-sm font-medium text-foreground">
-            Keith Kennedy
+            {user.firstName}
           </span>
           <span className="truncate text-xs font-normal text-muted-foreground">
-            k.kennedy@originui.com
+           {user.emailAddresses[0].emailAddress}
           </span>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <RiSettingsLine
-              size={16}
-              className="opacity-60"
-              aria-hidden="true"
-            />
-            <span>Account settings</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <RiTeamLine size={16} className="opacity-60" aria-hidden="true" />
-            <span>Affiliate area</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <RiLogoutBoxLine
@@ -59,7 +53,7 @@ export default function UserDropdown() {
             className="opacity-60"
             aria-hidden="true"
           />
-          <span>Sign out</span>
+         <SignOutButton />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

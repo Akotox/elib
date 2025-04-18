@@ -27,7 +27,7 @@ interface StatsCardProps {
 }
 const stats: StatsCardProps[] = [
   {
-    title: "Connections",
+    title: "E-books",
     value: "427,296",
     change: {
       value: "+12%",
@@ -45,7 +45,7 @@ const stats: StatsCardProps[] = [
     ),
   },
   {
-    title: "Contacts",
+    title: "Users",
     value: "37,429",
     change: {
       value: "+42%",
@@ -81,7 +81,7 @@ const stats: StatsCardProps[] = [
     ),
   },
   {
-    title: "Referrals",
+    title: "Sold",
     value: "3,497",
     change: {
       value: "-17%",

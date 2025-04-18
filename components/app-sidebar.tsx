@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { RiScanLine, RiBardLine, RiAddCircleFill, RiAddCircleLine } from "@remixicon/react";
+import { RiScanLine, RiBardLine, RiAddCircleLine } from "@remixicon/react";
 import { SignOutButton } from "@clerk/nextjs";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail } from "@/components/ui/sidebar";
 import { TeamSwitcher } from "./team-switcher";
@@ -35,7 +35,7 @@ const data = {
         },
         {
           title: "Add Products",
-          url: "/dashboard/add-product",
+          url: "/dashboard/add-products",
           icon: RiAddCircleLine,
         },
       ],
@@ -63,8 +63,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupContent className="px-2">
               <SidebarMenu>
                 {group.items.map((item) => {
-                  // Compute dynamic active state.
-                  // You can use pathname === item.url or adjust with startsWith for prefixes.
                   const isActive = pathname === item.url;
 
                   return (
