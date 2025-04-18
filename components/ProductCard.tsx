@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/lib/formatters"
+import { formatCurrency } from "@/lib/formatters";
 import {
   Card,
   CardContent,
@@ -6,20 +6,18 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card"
-import { Button } from "./ui/button"
-import Link from "next/link"
-import Image from "next/image"
-import {ArrowRight} from "lucide-react";
-import {HoverBorderGradient} from "@/components/ui/moving-button";
+} from "./ui/card";
+import { Button } from "./ui/button";
+import Link from "next/link";
+import Image from "next/image";
 
 type ProductCardProps = {
-  id: string
-  name: string
-  priceInCents: number
-  description: string
-  imagePath: string
-}
+  id: string;
+  name: string;
+  priceInCents: number;
+  description: string;
+  imagePath: string;
+};
 
 export function ProductCard({
   id,
@@ -35,25 +33,24 @@ export function ProductCard({
       </div>
       <CardHeader>
         <CardTitle>{name}</CardTitle>
-          <CardDescription className="truncate overflow-hidden text-ellipsis whitespace-nowrap">
-              {description}
-          </CardDescription>
+        <CardDescription className="truncate overflow-hidden text-ellipsis whitespace-nowrap">
+          {description}
+        </CardDescription>
       </CardHeader>
 
       <CardFooter>
-          <Button
-              variant="outline"
-              className="w-full rounded-2xl ml-1 tracking-normal bg-black text-white hover:bg-gray-700 hover:text-black transition-colors duration-300"
-              asChild
-          >
-              <Link href={`/products/${id}/purchase`}>
-                  <span>Purchase {formatCurrency(priceInCents / 100)}</span>
-              </Link>
-          </Button>
-
+        <Button
+          variant="outline"
+          className="w-full rounded-2xl ml-1 tracking-normal bg-black text-white hover:bg-gray-700 hover:text-black transition-colors duration-300"
+          asChild
+        >
+          <Link href={`/products/${id}/purchase`}>
+            <span>Purchase {formatCurrency(priceInCents / 100)}</span>
+          </Link>
+        </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 export function ProductCardSkeleton() {
@@ -65,7 +62,7 @@ export function ProductCardSkeleton() {
           <div className="w-3/4 h-6 rounded-full bg-gray-300" />
         </CardTitle>
         <CardDescription>
-          <div className="w-1/2 h-4 rounded-full bg-gray-300" />
+          <span className="block w-1/2 h-4 rounded-full bg-gray-300" />
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
@@ -77,5 +74,5 @@ export function ProductCardSkeleton() {
         <Button className="w-full" disabled size="lg"></Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

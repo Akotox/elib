@@ -51,12 +51,11 @@
 //   )
 // }
 
-"use client";
+// "use client";
 
-import { emailOrderHistory } from "@/app/actions/orders";
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useTransition, useState } from "react";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 export const mockOrders = [
   {
@@ -93,7 +92,7 @@ export const mockOrders = [
     },
   },
   {
-    id: "order-3",
+    id: "order-4",
     pricePaidInCents: 1999,
     createdAt: new Date().toISOString(),
     product: {
@@ -104,7 +103,7 @@ export const mockOrders = [
     },
   },
   {
-    id: "order-3",
+    id: "order-5",
     pricePaidInCents: 1999,
     createdAt: new Date().toISOString(),
     product: {
@@ -115,7 +114,7 @@ export const mockOrders = [
     },
   },
   {
-    id: "order-3",
+    id: "order-6",
     pricePaidInCents: 1999,
     createdAt: new Date().toISOString(),
     product: {
@@ -139,18 +138,20 @@ type Order = {
   };
 };
 
-export default function MyOrdersPage() {
-  const [pending, startTransition] = useTransition();
-  const [status, setStatus] = useState<Record<string, string>>({});
+export default async function MyOrdersPage() {
+  const { userId, redirectToSignIn } = await auth();
+
+  if (userId == null) return redirectToSignIn();
+
 
   const handleSend = (orderId: string) => {
-    startTransition(async () => {
+    // startTransition(async () => {
       // const res = await emailOrderHistory({ orderId })
       // setStatus((prev) => ({
       //   ...prev,
       //   [orderId]: res?.message || "Email sent!",
       // }))
-    });
+    // });
   };
 
   return (
@@ -180,11 +181,11 @@ export default function MyOrdersPage() {
                 variant="outline"
                 className="rounded-2xl ml-1 tracking-normal bg-blue-500 hover:bg-blue-600 transition-transform group-hover:translate-x-0.5 text-white"
               >
-                <span className="text-white">{pending ? "Sending..." : "Send Link"}</span>
+                <span className="text-white">Send Link</span>
               </Button>
-              {status[order.id] && (
-                <p className="text-xs text-green-600">{status[order.id]}</p>
-              )}
+              
+                {/* <p className="text-xs text-green-600">status</p> */}
+         
             </div>
           </li>
         ))}

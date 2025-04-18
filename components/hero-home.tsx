@@ -277,7 +277,16 @@ function ProductGridSection({
       <div className="space-y-4">
         <div className="flex gap-4 flex-row justify-between">
           <h2 className="text-3xl font-bold">{title}</h2>
-          c
+          <Button
+          asChild
+                variant="outline"
+                className="rounded-2xl ml-1 tracking-normal bg-blue-500 hover:bg-blue-600 transition-transform group-hover:translate-x-0.5 text-white"
+              >
+                <Link href="/products">
+                  <span className="text-white">View All</span>
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
 
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -7,7 +7,10 @@ const nextConfig = {
                 hostname: 'cdn.pixabay.com',
                 pathname: '**',
             },
-           
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com',
+              },
         ],
     },
 };
