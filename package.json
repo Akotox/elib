@@ -50,9 +50,7 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
-    "prisma": "^5.10.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "prisma": "^5.10.2"
   },
   "overrides": {
     "@types/react": "19.0.1",

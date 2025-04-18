@@ -6,8 +6,13 @@ import Avatar03 from "@/public/images/avatar-03.jpg";
 import Avatar04 from "@/public/images/avatar-04.jpg";
 import Avatar05 from "@/public/images/avatar-05.jpg";
 import Avatar06 from "@/public/images/avatar-06.jpg";
-import { ProductCard } from "./ProductCard";
+import {ProductCard, ProductCardSkeleton} from "./ProductCard";
 import { Product } from "@prisma/client";
+import db from "@/db/db";
+import {cache, Suspense} from "react";
+import { Button } from "./ui/button";
+import {ArrowRight} from "lucide-react";
+import Link from "next/link";
 
 
 const mockProducts: Product[] = [
@@ -123,6 +128,27 @@ const mockProducts: Product[] = [
   },
 ]
 
+const getMostPopularProducts = cache(
+    () => {
+      return db.product.findMany({
+        where: { isAvailableForPurchase: true },
+        orderBy: { orders: { _count: "desc" } },
+        take: 6,
+      })
+    },
+    // ["/", "getMostPopularProducts"],
+    // { revalidate: 60 * 60 * 24 }
+)
+
+const getNewestProducts = cache(() => {
+  return db.product.findMany({
+    where: { isAvailableForPurchase: true },
+    orderBy: { createdAt: "desc" },
+    take: 6,
+  })
+},
+    // ["/", "getNewestProducts"]
+)
 
 export default function HeroHome() {
   return (
@@ -187,8 +213,8 @@ export default function HeroHome() {
               data-aos="zoom-y-out"
               data-aos-delay={150}
             >
-              The website builder you're <br className="max-lg:hidden" />
-              looking for
+              The e-library store you’ve been  <br className="max-lg:hidden" />
+              waiting for
             </h1>
             <div className="mx-auto max-w-3xl">
               <p
@@ -196,8 +222,7 @@ export default function HeroHome() {
                 data-aos="zoom-y-out"
                 data-aos-delay={300}
               >
-                Simple is a modern website builder powered by AI that changes
-                how companies create user interfaces together.
+                E-lib is a powerful and intuitive platform designed to help authors and creators effortlessly publish, manage, and sell their eBooks online. From professional layouts to seamless transactions, E-lib makes digital publishing easier and more accessible than ever.
               </p>
               <div className="relative before:absolute before:inset-0 before:border-y before:[border-image:linear-gradient(to_right,transparent,--theme(--color-slate-300/.8),transparent)1]">
                 <div
@@ -207,10 +232,10 @@ export default function HeroHome() {
                 >
                   <a
                     className="btn group mb-4 w-full bg-linear-to-t from-blue-600 to-blue-500 bg-[length:100%_100%] bg-[bottom] text-white shadow-sm hover:bg-[length:100%_150%] sm:mb-0 sm:w-auto"
-                    href="#0"
+                    href="/products"
                   >
                     <span className="relative inline-flex items-center">
-                      Start Free Trial{" "}
+                      Browser Books{" "}
                       <span className="ml-1 tracking-normal text-blue-300 transition-transform group-hover:translate-x-0.5">
                         -&gt;
                       </span>
@@ -220,63 +245,69 @@ export default function HeroHome() {
                     className="btn w-full bg-white text-gray-800 shadow-sm hover:bg-gray-50 sm:ml-4 sm:w-auto"
                     href="#0"
                   >
-                    Learn More
+                    Request e-book
                   </a>
                 </div>
               </div>
             </div>
           </div>
-          {/* Hero image */}
-          {/* <div
-            className="mx-auto max-w-3xl"
-            data-aos="zoom-y-out"
-            data-aos-delay={600}
-          >
-            <div className="relative aspect-video rounded-2xl bg-gray-900 px-5 py-3 shadow-xl before:pointer-events-none before:absolute before:-inset-5 before:border-y before:[border-image:linear-gradient(to_right,transparent,--theme(--color-slate-300/.8),transparent)1] after:absolute after:-inset-5 after:-z-10 after:border-x after:[border-image:linear-gradient(to_bottom,transparent,--theme(--color-slate-300/.8),transparent)1]">
-              <div className="relative mb-8 flex items-center justify-between before:block before:h-[9px] before:w-[41px] before:bg-[length:16px_9px] before:[background-image:radial-gradient(circle_at_4.5px_4.5px,var(--color-gray-600)_4.5px,transparent_0)] after:w-[41px]">
-                <span className="text-[13px] font-medium text-white">
-                  cruip.com
-                </span>
-              </div>
-              <div className="font-mono text-gray-500 [&_span]:opacity-0">
-                <span className="animate-[code-1_10s_infinite] text-gray-200">
-                  npm login
-                </span>{" "}
-                <span className="animate-[code-2_10s_infinite]">
-                  --registry=https://npm.pkg.github.com
-                </span>
-                <br />
-                <span className="animate-[code-3_10s_infinite]">
-                  --scope=@phanatic
-                </span>{" "}
-                <span className="animate-[code-4_10s_infinite]">
-                  Successfully logged-in.
-                </span>
-                <br />
-                <br />
-                <span className="animate-[code-5_10s_infinite] text-gray-200">
-                  npm publish
-                </span>
-                <br />
-                <span className="animate-[code-6_10s_infinite]">
-                  Package published.
-                </span>
-              </div>
-            </div>
-          </div> */}
-          <ProductSuspense products={mockProducts} />
+
+          <ProductGridSection
+              title="Most Popular"
+              productsFetcher={getMostPopularProducts}
+          />
+          <div className="h-10"/>
+          <ProductGridSection title="Newest" productsFetcher={getNewestProducts} />
         </div>
       </div>
     </section>
   );
 }
 
-function ProductSuspense({ products }: { products: Product[] }) {
+type ProductGridSectionProps = {
+  title: string
+  productsFetcher: () => Promise<Product[]>
+}
+
+function ProductGridSection({
+                              productsFetcher,
+                              title,
+                            }: ProductGridSectionProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {products.map((product) => (
-        <ProductCard key={product.id} {...product} />
-      ))}
-    </div>
-  );
+      <div className="space-y-4">
+        <div className="flex gap-4 flex-row justify-between">
+          <h2 className="text-3xl font-bold">{title}</h2>
+          <Button variant="outline" className="rounded-2xl ml-1 tracking-normal bg-blue-500 transition-transform group-hover:translate-x-0.5" asChild>
+            <Link href="/products" className="space-x-2">
+              <span className="text-white">View All</span>
+              <ArrowRight className="size-4 text-white"/>
+            </Link>
+          </Button>
+
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Suspense
+              fallback={
+                <>
+                  <ProductCardSkeleton/>
+                  <ProductCardSkeleton/>
+                  <ProductCardSkeleton/>
+                </>
+              }
+          >
+            <ProductSuspense productsFetcher={productsFetcher}/>
+          </Suspense>
+        </div>
+      </div>
+  )
+}
+
+async function ProductSuspense({
+                                 productsFetcher,
+                               }: {
+  productsFetcher: () => Promise<Product[]>
+}) {
+  return (await productsFetcher()).map(product => (
+      <ProductCard key={product.id} {...product} />
+  ))
 }
