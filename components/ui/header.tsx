@@ -1,9 +1,27 @@
 import Link from "next/link";
 import Logo from "./logo";
 import { Button } from "./button";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
+
+
 
 export default function Header() {
+  const { isSignedIn, user, isLoaded } = useUser();
+  
+  const adminList = [
+    process.env.NEXT_PUBLIC_ADMIN1,
+    process.env.NEXT_PUBLIC_ADMIN2,
+    process.env.NEXT_PUBLIC_ADMIN3,
+    process.env.NEXT_PUBLIC_ADMIN4,
+  ];
+
+
   return (
     <header className="fixed top-2 z-30 w-full md:top-6">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -25,12 +43,22 @@ export default function Header() {
             </li>
             <li>
               <Link
-                href="/orders"
+                href="/history"
                 className="btn-sm bg-white text-gray-800 shadow-sm hover:bg-gray-50"
               >
-                My e-Books
+                History
               </Link>
             </li>
+            {isLoaded && isSignedIn && adminList.includes(user.id) && (
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="btn-sm bg-gray-800 text-white shadow-sm hover:bg-white hover:text-gray-800"
+                >
+                  Dashboard
+                </Link>
+              </li>
+            )}
 
             <li>
               <SignedOut>
@@ -44,13 +72,12 @@ export default function Header() {
 
               <SignedIn>
                 <div className="mt-2">
-                <UserButton
-                  appearance={{
-                    elements: { userButtonAvatarBox: "size-full" },
-                  }}
-                />
+                  <UserButton
+                    appearance={{
+                      elements: { userButtonAvatarBox: "size-full" },
+                    }}
+                  />
                 </div>
-                
               </SignedIn>
             </li>
           </ul>

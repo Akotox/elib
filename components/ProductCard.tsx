@@ -41,7 +41,7 @@ export function ProductCard({
       <CardFooter>
         <Button
           variant="outline"
-          className="w-full rounded-2xl ml-1 tracking-normal bg-black text-white hover:bg-gray-700 hover:text-black transition-colors duration-300"
+          className="w-full rounded-2xl ml-1 tracking-normal bg-black text-white hover:bg-blue-600 hover:text-whie transition-colors duration-300"
           asChild
         >
           <Link href={`/products/${id}/purchase`}>

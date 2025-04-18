@@ -16,6 +16,10 @@ import {  RiLogoutBoxLine } from "@remixicon/react";
 
 export default async function UserDropdown() {
   const { userId, redirectToSignIn } = await auth();
+
+  console.log('====================================');
+  console.log('User ID:', userId);
+  console.log('====================================');
   
     if (userId == null) return redirectToSignIn();
   

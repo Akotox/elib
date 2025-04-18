@@ -53,118 +53,125 @@
 
 // "use client";
 
-
 import { Button } from "@/components/ui/button";
+import db from "@/db/db";
+import { getUserOrders } from "@/server/client/getUserOrser";
 import { auth, currentUser } from "@clerk/nextjs/server";
 
-export const mockOrders = [
-  {
-    id: "order-1",
-    pricePaidInCents: 1499,
-    createdAt: new Date().toISOString(),
-    product: {
-      id: "prod-1",
-      name: "Next.js Crash Course",
-      imagePath: "/products/nextjs-course.jpg",
-      description: "Learn the basics of Next.js and build your first app.",
-    },
-  },
-  {
-    id: "order-2",
-    pricePaidInCents: 2999,
-    createdAt: new Date().toISOString(),
-    product: {
-      id: "prod-2",
-      name: "Advanced Tailwind Workshop",
-      imagePath: "/products/tailwind-workshop.jpg",
-      description: "Master Tailwind CSS with real-world examples.",
-    },
-  },
-  {
-    id: "order-3",
-    pricePaidInCents: 1999,
-    createdAt: new Date().toISOString(),
-    product: {
-      id: "prod-3",
-      name: "TypeScript for Beginners",
-      imagePath: "/products/typescript-course.jpg",
-      description: "Get started with TypeScript and write better JavaScript.",
-    },
-  },
-  {
-    id: "order-4",
-    pricePaidInCents: 1999,
-    createdAt: new Date().toISOString(),
-    product: {
-      id: "prod-3",
-      name: "TypeScript for Beginners",
-      imagePath: "/products/typescript-course.jpg",
-      description: "Get started with TypeScript and write better JavaScript.",
-    },
-  },
-  {
-    id: "order-5",
-    pricePaidInCents: 1999,
-    createdAt: new Date().toISOString(),
-    product: {
-      id: "prod-3",
-      name: "TypeScript for Beginners",
-      imagePath: "/products/typescript-course.jpg",
-      description: "Get started with TypeScript and write better JavaScript.",
-    },
-  },
-  {
-    id: "order-6",
-    pricePaidInCents: 1999,
-    createdAt: new Date().toISOString(),
-    product: {
-      id: "prod-3",
-      name: "TypeScript for Beginners",
-      imagePath: "/products/typescript-course.jpg",
-      description: "Get started with TypeScript and write better JavaScript.",
-    },
-  },
-];
+// export const mockOrders = [
+//   {
+//     id: "order-1",
+//     pricePaidInCents: 1499,
+//     createdAt: new Date().toISOString(),
+//     product: {
+//       id: "prod-1",
+//       name: "Next.js Crash Course",
+//       imagePath: "/products/nextjs-course.jpg",
+//       description: "Learn the basics of Next.js and build your first app.",
+//     },
+//   },
+//   {
+//     id: "order-2",
+//     pricePaidInCents: 2999,
+//     createdAt: new Date().toISOString(),
+//     product: {
+//       id: "prod-2",
+//       name: "Advanced Tailwind Workshop",
+//       imagePath: "/products/tailwind-workshop.jpg",
+//       description: "Master Tailwind CSS with real-world examples.",
+//     },
+//   },
+//   {
+//     id: "order-3",
+//     pricePaidInCents: 1999,
+//     createdAt: new Date().toISOString(),
+//     product: {
+//       id: "prod-3",
+//       name: "TypeScript for Beginners",
+//       imagePath: "/products/typescript-course.jpg",
+//       description: "Get started with TypeScript and write better JavaScript.",
+//     },
+//   },
+//   {
+//     id: "order-4",
+//     pricePaidInCents: 1999,
+//     createdAt: new Date().toISOString(),
+//     product: {
+//       id: "prod-3",
+//       name: "TypeScript for Beginners",
+//       imagePath: "/products/typescript-course.jpg",
+//       description: "Get started with TypeScript and write better JavaScript.",
+//     },
+//   },
+//   {
+//     id: "order-5",
+//     pricePaidInCents: 1999,
+//     createdAt: new Date().toISOString(),
+//     product: {
+//       id: "prod-3",
+//       name: "TypeScript for Beginners",
+//       imagePath: "/products/typescript-course.jpg",
+//       description: "Get started with TypeScript and write better JavaScript.",
+//     },
+//   },
+//   {
+//     id: "order-6",
+//     pricePaidInCents: 1999,
+//     createdAt: new Date().toISOString(),
+//     product: {
+//       id: "prod-3",
+//       name: "TypeScript for Beginners",
+//       imagePath: "/products/typescript-course.jpg",
+//       description: "Get started with TypeScript and write better JavaScript.",
+//     },
+//   },
+// ];
 
-type Order = {
-  id: string;
-  pricePaidInCents: number;
-  createdAt: string | Date;
-  product: {
-    id: string;
-    name: string;
-    imagePath: string;
-    description: string;
-  };
-};
+// type Order = {
+//   id: string;
+//   pricePaidInCents: number;
+//   createdAt: string | Date;
+//   product: {
+//     id: string;
+//     name: string;
+//     imagePath: string;
+//     description: string;
+//   };
+// };
 
 export default async function MyOrdersPage() {
   const { userId, redirectToSignIn } = await auth();
 
   if (userId == null) return redirectToSignIn();
 
+  const orders = await getUserOrders(userId);
 
   const handleSend = (orderId: string) => {
     // startTransition(async () => {
-      // const res = await emailOrderHistory({ orderId })
-      // setStatus((prev) => ({
-      //   ...prev,
-      //   [orderId]: res?.message || "Email sent!",
-      // }))
+    //   const res = await emailOrderHistory({ orderId })
+    //   setStatus((prev) => ({
+    //     ...prev,
+    //     [orderId]: res?.message || "Email sent!",
+    //   }))
     // });
   };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-16 pt-24">
-      <h1 className="text-2xl font-semibold mb-6">Your Orders</h1>
+      <h1 className="text-2xl font-semibold mb-6">Purchase History</h1>
+      <p className="text-sm mb-6 text-black">
+        Once your purchase is complete, a download link will be sent to your
+        email. If you do not receive the email or accidentally delete it, you
+        can return to this page to access your purchase history and request the
+        download link again.
+      </p>
       <ul className="space-y-6">
-        {mockOrders.map((order) => (
+        {orders.map((order) => (
           <li
             key={order.id}
             className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-4 gap-4"
           >
             <div className="flex items-center gap-4">
-             
               <div>
                 <p className="font-medium">{order.product.name}</p>
                 <p className="text-sm text-gray-500">
@@ -183,9 +190,8 @@ export default async function MyOrdersPage() {
               >
                 <span className="text-white">Send Link</span>
               </Button>
-              
-                {/* <p className="text-xs text-green-600">status</p> */}
-         
+
+              {/* <p className="text-xs text-green-600">status</p> */}
             </div>
           </li>
         ))}
