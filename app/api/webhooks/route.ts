@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { NextResponse, NextRequest } from "next/server";
-import { Resend } from "resend";
+// import { Resend } from "resend";
 
 
 export async function POST(req: NextRequest) {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     console.log(`Received event: ${event.type}`);
 
     // Process asynchronously — don't wait for it to finish
-    processWebhookEvent(event).catch((error) =>
+    await processWebhookEvent(event).catch((error) =>
       console.error(`Error processing event ${event.type}:`, error),
     );
 
