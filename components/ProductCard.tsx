@@ -8,8 +8,9 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Button } from "./ui/button";
-import Link from "next/link";
 import Image from "next/image";
+import { CheckOutRequest } from "@/app/api/stripe/checkout/route";
+import { CheckoutButton } from "./checkout-button";
 
 type ProductCardProps = {
   id: string;
@@ -17,6 +18,7 @@ type ProductCardProps = {
   priceInCents: number;
   description: string;
   imagePath: string;
+  stripePriceId: string | null; 
 };
 
 export function ProductCard({
@@ -25,7 +27,33 @@ export function ProductCard({
   priceInCents,
   description,
   imagePath,
+  stripePriceId,
 }: ProductCardProps) {
+
+  // const checkoutData: CheckOutRequest = {
+  //   priceId: id,
+  //   productId: stripePriceId!,
+  // };
+
+  // const handlePurchase = async () => {
+  //   if (!stripePriceId) return;
+  //   const response = await fetch("/api/stripe/checkout", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       priceId: stripePriceId,
+  //       productId: id,
+  //       clerkUserId: "clerkUserId", // Replace with actual user ID
+  //     }),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+
+  //   const { url } = await response.json();
+  //   window.location.href = url;
+  // };
+
+
   return (
     <Card className="flex overflow-hidden flex-col">
       <div className="relative w-full h-auto aspect-video">
@@ -39,15 +67,9 @@ export function ProductCard({
       </CardHeader>
 
       <CardFooter>
-        <Button
-          variant="outline"
-          className="w-full rounded-2xl ml-1 tracking-normal bg-black text-white hover:bg-blue-600 hover:text-whie transition-colors duration-300"
-          asChild
-        >
-          <Link href={`/products/${id}/purchase`}>
-            <span>Purchase {formatCurrency(priceInCents / 100)}</span>
-          </Link>
-        </Button>
+        <CheckoutButton 
+          priceId={stripePriceId!}
+          productId={id}/>
       </CardFooter>
     </Card>
   );

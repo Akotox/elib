@@ -61,7 +61,7 @@ export function OrderInformation({
           </Column>
           <Column align="right">
             <Button
-              href={`${process.env.NEXT_PUBLIC_SERVER_URL}/products/download/${downloadVerificationId}`}
+              href={downloadVerificationId}
               className="bg-black text-white px-6 py-4 rounded text-lg"
             >
               Download
