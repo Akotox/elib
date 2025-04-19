@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
   const payload = await req.text();
   const sig = req.headers.get("stripe-signature");
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
   try {
     const event = stripe.webhooks.constructEvent(
       payload,
@@ -16,16 +17,16 @@ export async function POST(req: NextRequest) {
 
     console.log(`Received event: ${event.type}`);
 
-    NextResponse.json({ status: "received", event: event.type });
-
+    // Process asynchronously — don't wait for it to finish
     processWebhookEvent(event).catch((error) =>
       console.error(`Error processing event ${event.type}:`, error),
     );
 
+    // ✅ Return early without redirect
     return NextResponse.json({ status: "success", event: event.type });
   } catch (error) {
     console.error("Webhook signature verification failed:", error);
-    return NextResponse.json({ status: "Failed", error: "Invalid signature" });
+    return new NextResponse("Invalid signature", { status: 400 });
   }
 }
 
