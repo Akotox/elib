@@ -21,15 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 0;
 
 export default async function SuccessPage({
-  params: { productId },
-  searchParams: { session_id },
+  searchParams: { session_id, product_id },
 }: {
-  params: { productId: string };
-  searchParams: { session_id: string };
+  searchParams: { session_id: string, product_id: string };
 }) {
   
     const product = await db.product.findUnique({
-      where: { id: productId },
+      where: { id: product_id },
     });
   
     if (!product) {
