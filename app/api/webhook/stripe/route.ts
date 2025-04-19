@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   console.log("👉 Webhook endpoint hit"); // 👈 This is your key log
 
   const payload = await req.text();
-  const sig = req.headers.get("stripe-signature");
+  const sig = req.headers.get("Stripe-Signature");
   console.log('====================================');
   console.log('Payload:', payload);
   console.log('====================================');
