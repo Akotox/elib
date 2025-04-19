@@ -3,7 +3,6 @@ import { NextResponse, NextRequest } from "next/server";
 import { Resend } from "resend";
 
 
-
 export async function POST(req: NextRequest) {
   const payload = await req.text();
   const sig = req.headers.get("stripe-signature");
