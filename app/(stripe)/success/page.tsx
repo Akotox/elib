@@ -19,15 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const revalidate = 0;
 
-interface Props {
-  searchParams: {
-    session_id?: string;
-    product_id?: string;
-  };
-}
-
-export default async function SuccessPage(props: Props) {
-  const { session_id, product_id } = props.searchParams;
+export default async function SuccessPage({
+  searchParams,
+}: {
+  searchParams: { session_id?: string; product_id?: string };
+}) {
+  const { session_id, product_id } = searchParams;
 
   if (!product_id) return notFound();
 
@@ -35,9 +32,7 @@ export default async function SuccessPage(props: Props) {
     where: { id: product_id },
   });
 
-  if (!product) {
-    return notFound();
-  }
+  if (!product) return notFound();
 
   const appUrl = process.env.NEXT_PUBLIC_URL;
 
