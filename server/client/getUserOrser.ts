@@ -8,7 +8,7 @@ export interface OrderWithProduct {
   createdAt: Date;
   updatedAt: Date;
   status: "PENDING" | "DELIVERED" | "FAILED"; 
-  userId: string;
+  userId: string | null;
   email: string;
   productId: string;
   product: {
