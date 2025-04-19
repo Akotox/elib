@@ -2,7 +2,7 @@
 
 import db from "@/db/db";
 
-interface OrderWithProduct {
+export interface OrderWithProduct {
   id: string;
   pricePaidInCents: number;
   createdAt: Date;

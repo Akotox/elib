@@ -13,6 +13,8 @@ import { StatsGrid } from "@/components/stats-grid";
 
 import { JSX } from "react";
 import DashboardHeader from "@/components/dash-boardheader";
+import { getAllOrders } from "@/server/admin/getAllOrders";
+import OrdersTable from "@/components/orders_table";
 
 type Trend = "up" | "down";
 
@@ -100,7 +102,8 @@ const stats: StatsCardProps[] = [
   },
 ];
 
-export default function Page() {
+export default async function Page() {
+  const orders = await getAllOrders();
   return (
     <div className="flex flex-1 flex-col gap-4 lg:gap-6 py-4 lg:py-6">
       <DashboardHeader />
@@ -108,7 +111,7 @@ export default function Page() {
       <>
         <StatsGrid stats={stats} />
         <div className="min-h-[100vh] flex-1 md:min-h-min">
-          <ContactsTable />
+          <OrdersTable orders={orders}  />
         </div>
       </>
     </div>
