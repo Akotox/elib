@@ -15,10 +15,10 @@ export default function Header() {
   const { isSignedIn, user, isLoaded } = useUser();
   
   const adminList = [
-    process.env.NEXT_PUBLIC_ADMIN1,
-    process.env.NEXT_PUBLIC_ADMIN2,
-    process.env.NEXT_PUBLIC_ADMIN3,
-    process.env.NEXT_PUBLIC_ADMIN4,
+    process.env.NEXT_PUBLIC_ADMIN_1,
+    process.env.NEXT_PUBLIC_ADMIN_2,
+    process.env.NEXT_PUBLIC_ADMIN_3,
+    process.env.NEXT_PUBLIC_ADMIN_4,
   ];
 
 
