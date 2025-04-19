@@ -19,20 +19,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const revalidate = 0;
 
-export default async function SuccessPage({
-  searchParams,
-}: {
-  searchParams: { session_id?: string; product_id?: string };
-}) {
-  const { session_id, product_id } = searchParams;
+export default async function SuccessPage() {
+  // const { session_id, product_id } = searchParams;
 
-  if (!product_id) return notFound();
+  // if (!product_id) return notFound();
 
-  const product = await db.product.findUnique({
-    where: { id: product_id },
-  });
+  // const product = await db.product.findUnique({
+  //   where: { id: product_id },
+  // });
 
-  if (!product) return notFound();
+  // if (!product) return notFound();
 
   const appUrl = process.env.NEXT_PUBLIC_URL;
 
@@ -42,7 +38,7 @@ export default async function SuccessPage({
         <CardHeader className="text-center flex items-center justify-center mb-4">
           <CheckCircle className="w-12 h-12 text-green-500 " />
           <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
-            {`Successfully Purchased ${product.name} e-book`}
+            {`Purchase Successful`}
           </CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-300">
             Thank you for your purchase! Your order is being processed.
