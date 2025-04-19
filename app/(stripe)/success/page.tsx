@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,19 +19,25 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const revalidate = 0;
 
-export default async function SuccessPage({
-  searchParams: { session_id, product_id },
-}: {
-  searchParams: { session_id: string, product_id: string };
-}) {
-  
-    const product = await db.product.findUnique({
-      where: { id: product_id },
-    });
-  
-    if (!product) {
-      return notFound();
-    }
+interface Props {
+  searchParams: {
+    session_id?: string;
+    product_id?: string;
+  };
+}
+
+export default async function SuccessPage(props: Props) {
+  const { session_id, product_id } = props.searchParams;
+
+  if (!product_id) return notFound();
+
+  const product = await db.product.findUnique({
+    where: { id: product_id },
+  });
+
+  if (!product) {
+    return notFound();
+  }
 
   const appUrl = process.env.NEXT_PUBLIC_URL;
 
@@ -40,7 +45,7 @@ export default async function SuccessPage({
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <Card className="max-w-xl bg-gradient-to-br from-blue-50 to-gray-100 shadow-lg rounded-2xl p-6 w-full mx-4">
         <CardHeader className="text-center flex items-center justify-center mb-4">
-            <CheckCircle className="w-12 h-12 text-green-500 " />
+          <CheckCircle className="w-12 h-12 text-green-500 " />
           <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
             {`Successfully Purchased ${product.name} e-book`}
           </CardTitle>
@@ -49,8 +54,8 @@ export default async function SuccessPage({
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center text-gray-700 dark:text-gray-200">
-          🎉 You should receive an email with a download link shortly. Feel free to
-          close this page or check your order history to resend the link.
+          🎉 You should receive an email with a download link shortly. Feel free
+          to close this page or check your order history to resend the link.
         </CardContent>
         <CardFooter className="flex justify-center">
           <a href={appUrl} className="inline-block">
