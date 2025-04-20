@@ -28,7 +28,7 @@ export async function sendConfirmationEmail({
     console.log('====================================');
 
     const response = await resend.emails.send({
-      from: "StudyBuddy <no-reply@studybuddy.ing>",
+      from: "Horizon Developers <no-reply@horizonapps.cloud>",
       to: [customerEmail],
       subject: "Your e-book purchase is confirmed",
       react: PurchaseConfirmationEmail({ firstName, downloadUrl }),

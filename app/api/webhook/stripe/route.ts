@@ -89,12 +89,8 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    console.log('====================================');
-    console.log(customerEmail);
-    console.log('====================================');
-
     await resend.emails.send({
-      from: "StudyBuddy <no-reply@studybuddy.ing>",
+      from: "Horizon Developers <no-reply@horizonapps.cloud>",
       to: [customerEmail!],
       subject: "Your e-book purchase is confirmed",
       react: PurchaseConfirmationEmail({
