@@ -1,5 +1,8 @@
 import Stripe from "stripe";
 import { NextResponse, NextRequest } from "next/server";
+import db from "@/db/db";
+import { OrderStatus } from "@prisma/client";
+import { clerkClient, currentUser } from "@clerk/nextjs/server";
 // import { Resend } from "resend";
 
 export async function POST(req: NextRequest) {
@@ -22,9 +25,7 @@ export async function POST(req: NextRequest) {
 
     console.log(`✅ Received Stripe event: ${event.type}`);
 
-    await processWebhookEvent(event).catch((error) =>
-      console.error(`❌ Error processing event ${event.type}:`, error),
-    );
+    await processWebhookEvent(event)
 
     return NextResponse.json({ status: "success", event: event.type });
   } catch (error) {
@@ -63,33 +64,49 @@ async function processWebhookEvent(event: Stripe.Event) {
 
 async function handleCheckoutSessionCompleted(event: Stripe.Event) {
   const session = event.data.object as Stripe.Checkout.Session;
-//   const userId = session.metadata?.user_id as string;
-  const productId = session.metadata?.product_id as string;
+
+  const metadata = session.metadata ?? {};
+  const { user_id, product_id, price_id } = metadata;
   try {
 
-    console.log('====================================');
-    console.log('Checkout session completed:', session.id); 
-    console.log('====================================');
+    console.log("====================================");
+    console.log("✅ Checkout session completed:", session.id);
+    console.log("🧾 Metadata:", metadata);
+    console.log("🔑 user_id:", user_id);
+    console.log("📦 product_id:", product_id);
+    console.log("💲 price_id:", price_id);
+    console.log("====================================");
     
-    // const { userId } = await auth()
+    const product = await db.product.findFirst({
+      where: {
+        id: product_id,
+      },
+    })
 
+    const user = await currentUser()
 
-    // console.log('====================================');
-    // console.log('User:', userId);
-    // console.log('===================================='); 
+    if (!user) {
+      console.log('====================================');
+      console.log('User not found');
+      console.log('====================================');
+    }
 
-    // const user = await currentUser()
+    
 
-    // console.log('====================================');
-    // console.log('User:', user);
-    // console.log('====================================');
+    if (product) {
+      await db.order.create({
+        data: {
+          userId: user_id,
+          productId: product_id,
+          pricePaidInCents: product.priceInCents,
+          status: OrderStatus.DELIVERED,
+          email: user?.emailAddresses[0].emailAddress!,
+        }
+      })
+  
+    }
 
-
-
-    console.log('====================================');
-    console.log('Product:', productId);
-    console.log('====================================');
-
+   
     // const resend = new Resend(process.env.RESEND_API_KEY);
     //     await resend.emails.send({
     //         from: "StudyBuddy <no-reply@studybuddy.ing>",

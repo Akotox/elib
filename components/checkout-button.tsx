@@ -1,10 +1,12 @@
 "use client";
 
+import { formatCurrency } from "@/lib/formatters";
 import { Button } from "./ui/button";
 
 type CheckoutButtonProps = {
   productId: string;
   priceId: string | null;
+  priceInCents: number;
 };
 
 export function CheckoutButton({ productId, priceId }: CheckoutButtonProps) {
@@ -33,7 +35,7 @@ export function CheckoutButton({ productId, priceId }: CheckoutButtonProps) {
       onClick={handlePurchase}
       disabled={!priceId}
     >
-      <span>Purchase</span>
+      <span>Purchase </span>
     </Button>
   );
 }

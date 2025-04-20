@@ -9,7 +9,6 @@ import {
 } from "./ui/card";
 import { Button } from "./ui/button";
 import Image from "next/image";
-import { CheckOutRequest } from "@/app/api/stripe/checkout/route";
 import { CheckoutButton } from "./checkout-button";
 
 type ProductCardProps = {
@@ -45,7 +44,7 @@ export function ProductCard({
       <CardFooter>
         <CheckoutButton 
           priceId={stripePriceId!}
-          productId={id}/>
+          productId={id} priceInCents={priceInCents}/>
       </CardFooter>
     </Card>
   );
