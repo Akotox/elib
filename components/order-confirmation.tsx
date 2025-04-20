@@ -9,8 +9,7 @@ export default function OrderActions({ order }: { order: OrderWithProduct }) {
     
     await sendConfirmationEmail({
       customerEmail: order.email,
-      firstName: "BookWorm",
-      downloadUrl: order.product.filePath,
+      order: order,
     });
   };
 

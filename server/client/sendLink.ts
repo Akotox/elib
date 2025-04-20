@@ -1,42 +1,31 @@
 "use server";
 
 import PurchaseConfirmationEmail from "@/emails/PurchaceConfirmation";
+import RequestedDownloadEmail from "@/emails/RequestedLinkEmail";
 import { Resend } from "resend";
+import { OrderWithProduct } from "./getUserOrser";
 
 
 type EmailParams = {
   customerEmail: string;
-  firstName: string;
-  downloadUrl: string;
+  order: OrderWithProduct;
 };
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendConfirmationEmail({
   customerEmail,
-  firstName,
-  downloadUrl,
+  order
 }: EmailParams) {
   try {
-    console.log('====================================');
-    console.log(
-        "Sending confirmation email to:",
-        customerEmail,
-        "with download URL:",
-        downloadUrl
-    );
-    console.log('====================================');
 
     const response = await resend.emails.send({
       from: "Horizon Developers <no-reply@horizonapps.cloud>",
       to: [customerEmail],
       subject: "Your e-book purchase is confirmed",
-      react: PurchaseConfirmationEmail({ firstName, downloadUrl }),
+      react: RequestedDownloadEmail({order}),
     });
 
-    console.log('====================================');
-    console.log("Email sent successfully:", response);
-    console.log('====================================');
 
     return {
       success: true,
