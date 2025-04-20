@@ -2,8 +2,8 @@ import Stripe from "stripe";
 import { NextResponse, NextRequest } from "next/server";
 import db from "@/db/db";
 import { OrderStatus } from "@prisma/client";
-import { clerkClient, currentUser } from "@clerk/nextjs/server";
-// import { Resend } from "resend";
+import PurchaseConfirmationEmail from "@/email/PurchaceConfirmation";
+import { Resend } from "resend";
 
 export async function POST(req: NextRequest) {
   console.log("👉 Webhook endpoint hit"); // 👈 This is your key log
@@ -67,30 +67,13 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
 
   const metadata = session.metadata ?? {};
   const { user_id, product_id, price_id } = metadata;
+  const customerEmail = session.customer_details?.email;
   try {
-
-    console.log("====================================");
-    console.log("✅ Checkout session completed:", session.id);
-    console.log("🧾 Metadata:", metadata);
-    console.log("🔑 user_id:", user_id);
-    console.log("📦 product_id:", product_id);
-    console.log("💲 price_id:", price_id);
-    console.log("====================================");
-    
     const product = await db.product.findFirst({
       where: {
         id: product_id,
       },
     })
-
-    const user = await currentUser()
-
-    if (!user) {
-      console.log('====================================');
-      console.log('User not found');
-      console.log('====================================');
-    }
-
     
 
     if (product) {
@@ -100,28 +83,27 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
           productId: product_id,
           pricePaidInCents: product.priceInCents,
           status: OrderStatus.DELIVERED,
-          email: user?.emailAddresses[0].emailAddress!,
+          email: customerEmail!,
         }
       })
+
+      const resend = new Resend(process.env.RESEND_API_KEY);
+
+    await resend.emails.send({
+      from: "StudyBuddy <no-reply@studybuddy.ing>",
+      to: [customerEmail!],
+      subject: "Your e-book purchase is confirmed",
+      react: PurchaseConfirmationEmail({
+        firstName: "User",
+        downloadUrl: product?.filePath, // e.g., from Stripe metadata or backend logic
+        receiptUrl: "",
+      }),
+    });
   
     }
 
    
-    // const resend = new Resend(process.env.RESEND_API_KEY);
-    //     await resend.emails.send({
-    //         from: "StudyBuddy <no-reply@studybuddy.ing>",
-    //         to: [`${invoice.customer_email}`],
-    //         subject: "StudyBuddy subscription has been successfully activated",
-    //         react: StudyBuddySubscriptionEmail({
-    //           firstName: user.name,
-    //           subscriptionPlan: plan,
-    //           invoiceLink: invoice.hosted_invoice_url as string,
-    //           pricePaid: invoice.amount_paid,
-    //           locale: user.locale as "en" | "es" | "vi",
-    //           lessonCount: Number(session.metadata!.lesson_count!),
-    //           teacherName: teacherName as string,
-    //         }),
-    //       });
+    
   } catch (error) {
     
   }

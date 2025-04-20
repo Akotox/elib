@@ -1,10 +1,11 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
-import { getAuth, clerkClient } from '@clerk/nextjs/server'
+import { getAuth, clerkClient, currentUser } from '@clerk/nextjs/server'
 
 export type CheckOutRequest = {
   priceId: string;
   productId: string;
+  email: string;
 };
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
@@ -13,18 +14,12 @@ export async function POST(req: NextRequest) {
 
   const { userId } = getAuth(req)
 
-  // Protect the route by checking if the user is signed in
-  if (!userId) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 },
-    );
-  }
 
 
   const {
     priceId,
     productId,
+    email,
   }: CheckOutRequest = await req.json();
 
   try {
@@ -42,6 +37,7 @@ export async function POST(req: NextRequest) {
         price_id: priceId,
         user_id: userId,
         product_id: productId,
+        email: email,
       },
     });
 

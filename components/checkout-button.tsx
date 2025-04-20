@@ -1,6 +1,4 @@
 "use client";
-
-import { formatCurrency } from "@/lib/formatters";
 import { Button } from "./ui/button";
 
 type CheckoutButtonProps = {
@@ -10,7 +8,10 @@ type CheckoutButtonProps = {
 };
 
 export function CheckoutButton({ productId, priceId }: CheckoutButtonProps) {
+  
   const handlePurchase = async () => {
+    // const user = await currentUser()
+
     if (!priceId) return;
     const response = await fetch("/api/stripe/checkout", {
       method: "POST",
