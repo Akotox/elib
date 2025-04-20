@@ -55,18 +55,8 @@ import {
                   Your e-book is ready ✨
                 </Heading>
                 <Text className="text-[16px] text-gray-800 mt-2">
-                  As requested, here’s your personal download link for the book you previously purchased.
+                  As requested, here’s your personal download link for the book : {order.product.name} you previously purchased.
                 </Text>
-  
-                <Section className="mt-6 flex flex-col items-start gap-4">
-                 
-                  <Text className="text-[18px] font-semibold text-gray-900">
-                    {order.product.name}
-                  </Text>
-                  <Text className="text-[14px] text-gray-700 max-w-sm mx-auto">
-                    {order.product.description}
-                  </Text>
-                </Section>
   
                 <div className="mt-6">
                   <Button
