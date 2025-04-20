@@ -6,35 +6,37 @@ import Avatar03 from "@/public/images/avatar-03.jpg";
 import Avatar04 from "@/public/images/avatar-04.jpg";
 import Avatar05 from "@/public/images/avatar-05.jpg";
 import Avatar06 from "@/public/images/avatar-06.jpg";
-import {ProductCard, ProductCardSkeleton} from "./ProductCard";
+import { ProductCard, ProductCardSkeleton } from "./ProductCard";
 import { Product } from "@prisma/client";
 import db from "@/db/db";
-import {cache, Suspense} from "react";
+import { cache, Suspense } from "react";
 import { Button } from "./ui/button";
-import {ArrowRight} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import RequestBookDialog from "./request-dialog";
 
 const getMostPopularProducts = cache(
-    () => {
-      return db.product.findMany({
-        where: { isAvailableForPurchase: true },
-        orderBy: { orders: { _count: "desc" } },
-        take: 6,
-      })
-    },
-    // ["/", "getMostPopularProducts"],
-    // { revalidate: 60 * 60 * 24 }
-)
+  () => {
+    return db.product.findMany({
+      where: { isAvailableForPurchase: true },
+      orderBy: { orders: { _count: "desc" } },
+      take: 6,
+    });
+  }
+  // ["/", "getMostPopularProducts"],
+  // { revalidate: 60 * 60 * 24 }
+);
 
-const getNewestProducts = cache(() => {
-  return db.product.findMany({
-    where: { isAvailableForPurchase: true },
-    orderBy: { createdAt: "desc" },
-    take: 6,
-  })
-},
-    // ["/", "getNewestProducts"]
-)
+const getNewestProducts = cache(
+  () => {
+    return db.product.findMany({
+      where: { isAvailableForPurchase: true },
+      orderBy: { createdAt: "desc" },
+      take: 6,
+    });
+  }
+  // ["/", "getNewestProducts"]
+);
 
 export default function HeroHome() {
   return (
@@ -99,7 +101,7 @@ export default function HeroHome() {
               data-aos="zoom-y-out"
               data-aos-delay={150}
             >
-              The e-library store you’ve been  <br className="max-lg:hidden" />
+              The e-library store you’ve been <br className="max-lg:hidden" />
               waiting for
             </h1>
             <div className="mx-auto max-w-3xl">
@@ -108,7 +110,11 @@ export default function HeroHome() {
                 data-aos="zoom-y-out"
                 data-aos-delay={300}
               >
-                E-lib is a powerful and intuitive platform designed to help authors and creators effortlessly publish, manage, and sell their eBooks online. From professional layouts to seamless transactions, E-lib makes digital publishing easier and more accessible than ever.
+                E-lib is a powerful and intuitive platform designed to help
+                authors and creators effortlessly publish, manage, and sell
+                their eBooks online. From professional layouts to seamless
+                transactions, E-lib makes digital publishing easier and more
+                accessible than ever.
               </p>
               <div className="relative before:absolute before:inset-0 before:border-y before:[border-image:linear-gradient(to_right,transparent,--theme(--color-slate-300/.8),transparent)1]">
                 <div
@@ -127,23 +133,22 @@ export default function HeroHome() {
                       </span>
                     </span>
                   </a>
-                  <a
-                    className="btn w-full bg-white text-gray-800 shadow-sm hover:bg-gray-50 sm:ml-4 sm:w-auto"
-                    href="#0"
-                  >
-                    Request e-book
-                  </a>
+
+                  <RequestBookDialog />
                 </div>
               </div>
             </div>
           </div>
 
           <ProductGridSection
-              title="Most Popular"
-              productsFetcher={getMostPopularProducts}
+            title="Most Popular"
+            productsFetcher={getMostPopularProducts}
           />
-          <div className="h-10"/>
-          <ProductGridSection title="Newest" productsFetcher={getNewestProducts} />
+          <div className="h-10" />
+          <ProductGridSection
+            title="Newest"
+            productsFetcher={getNewestProducts}
+          />
         </div>
       </div>
     </section>
@@ -151,53 +156,52 @@ export default function HeroHome() {
 }
 
 type ProductGridSectionProps = {
-  title: string
-  productsFetcher: () => Promise<Product[]>
-}
+  title: string;
+  productsFetcher: () => Promise<Product[]>;
+};
 
 function ProductGridSection({
-                              productsFetcher,
-                              title,
-                            }: ProductGridSectionProps) {
+  productsFetcher,
+  title,
+}: ProductGridSectionProps) {
   return (
-      <div className="space-y-4">
-        <div className="flex gap-4 flex-row justify-between">
-          <h2 className="text-3xl font-bold">{title}</h2>
-          <Button
+    <div className="space-y-4">
+      <div className="flex gap-4 flex-row justify-between">
+        <h2 className="text-3xl font-bold">{title}</h2>
+        <Button
           asChild
-                variant="outline"
-                className="rounded-2xl ml-1 tracking-normal bg-blue-500 hover:bg-blue-600 transition-transform group-hover:translate-x-0.5 text-white"
-              >
-                <Link href="/products">
-                  <span className="text-white">View All</span>
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Suspense
-              fallback={
-                <>
-                  <ProductCardSkeleton/>
-                  <ProductCardSkeleton/>
-                  <ProductCardSkeleton/>
-                </>
-              }
-          >
-            <ProductSuspense productsFetcher={productsFetcher}/>
-          </Suspense>
-        </div>
+          variant="outline"
+          className="rounded-2xl ml-1 tracking-normal bg-blue-500 hover:bg-blue-600 transition-transform group-hover:translate-x-0.5 text-white"
+        >
+          <Link href="/products">
+            <span className="text-white">View All</span>
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
       </div>
-  )
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Suspense
+          fallback={
+            <>
+              <ProductCardSkeleton />
+              <ProductCardSkeleton />
+              <ProductCardSkeleton />
+            </>
+          }
+        >
+          <ProductSuspense productsFetcher={productsFetcher} />
+        </Suspense>
+      </div>
+    </div>
+  );
 }
 
 async function ProductSuspense({
-                                 productsFetcher,
-                               }: {
-  productsFetcher: () => Promise<Product[]>
+  productsFetcher,
+}: {
+  productsFetcher: () => Promise<Product[]>;
 }) {
-  return (await productsFetcher()).map(product => (
-      <ProductCard key={product.id} {...product} />
-  ))
+  return (await productsFetcher()).map((product) => (
+    <ProductCard key={product.id} {...product} />
+  ));
 }

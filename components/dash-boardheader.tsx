@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import Link from "next/link";
 
 export default async function  DashboardHeader() {
   const { userId, redirectToSignIn } = await auth();
@@ -20,7 +21,11 @@ export default async function  DashboardHeader() {
           to your collection effortlessly.
         </p>
       </div>
-      <Button className="px-3">Add E-book</Button>
+      <Button className="px-3" asChild>
+        <Link href="/dashboard/add-products">
+          <span>Add Product</span>
+        </Link>
+      </Button>
     </div>
   );
 }

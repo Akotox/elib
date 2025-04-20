@@ -55,11 +55,11 @@ import {
                   Hello {firstName},
                 </Heading>
                 <Text className="text-[16px] text-gray-800 mt-4">
-                  Thank you for your purchase with Study Buddy. Your transaction was successful!
+                  Thank you for your purchase with E-lib. Your transaction was successful!
                 </Text>
   
                 <Text className="text-[16px] text-gray-800 mt-4">
-                  You can download your purchased item and view your receipt using the buttons below.
+                  You can download your purchased e-book and save it locally using the buttons below.
                 </Text>
   
                 <div className="mt-6 flex flex-col gap-4">
@@ -67,14 +67,14 @@ import {
                     href={downloadUrl}
                     className="bg-blue-600 text-white px-5 py-3 rounded-lg text-sm font-medium"
                   >
-                    📦 Download Your Item
+                    📦 Download E-book
                   </Button>
-                  <Button
+                  {/* <Button
                     href={receiptUrl}
                     className="bg-gray-200 text-blue-600 px-5 py-3 rounded-lg text-sm font-medium"
                   >
                     🧾 View Your Receipt
-                  </Button>
+                  </Button> */}
                 </div>
               </Section>
   

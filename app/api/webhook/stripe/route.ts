@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { NextResponse, NextRequest } from "next/server";
 import db from "@/db/db";
 import { OrderStatus } from "@prisma/client";
-import PurchaseConfirmationEmail from "@/email/PurchaceConfirmation";
+import PurchaseConfirmationEmail from "@/emails/PurchaceConfirmation";
 import { Resend } from "resend";
 
 export async function POST(req: NextRequest) {
@@ -87,7 +87,7 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
         }
       })
 
-      const resend = new Resend(process.env.RESEND_API_KEY);
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
       from: "StudyBuddy <no-reply@studybuddy.ing>",
