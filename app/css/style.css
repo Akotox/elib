@@ -1,5 +1,6 @@
 @import 'tailwindcss';
-
+@import "uploadthing/tw/v4";
+@source "../node_modules/@uploadthing/react/dist";
 /* Additional styles */
 @import './additional-styles/utility-patterns.css' layer(components);
 @import './additional-styles/theme.css';
