@@ -30,30 +30,6 @@ export function ProductCard({
   stripePriceId,
 }: ProductCardProps) {
 
-  // const checkoutData: CheckOutRequest = {
-  //   priceId: id,
-  //   productId: stripePriceId!,
-  // };
-
-  // const handlePurchase = async () => {
-  //   if (!stripePriceId) return;
-  //   const response = await fetch("/api/stripe/checkout", {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       priceId: stripePriceId,
-  //       productId: id,
-  //       clerkUserId: "clerkUserId", // Replace with actual user ID
-  //     }),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-
-  //   const { url } = await response.json();
-  //   window.location.href = url;
-  // };
-
-
   return (
     <Card className="flex overflow-hidden flex-col">
       <div className="relative w-full h-auto aspect-video">
