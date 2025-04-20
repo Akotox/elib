@@ -89,14 +89,17 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
+    console.log('====================================');
+    console.log(customerEmail);
+    console.log('====================================');
+
     await resend.emails.send({
       from: "StudyBuddy <no-reply@studybuddy.ing>",
       to: [customerEmail!],
       subject: "Your e-book purchase is confirmed",
       react: PurchaseConfirmationEmail({
-        firstName: "User",
+        firstName: "Book Worm",
         downloadUrl: product?.filePath, // e.g., from Stripe metadata or backend logic
-        receiptUrl: "",
       }),
     });
   

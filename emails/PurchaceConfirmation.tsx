@@ -15,13 +15,11 @@ import {
   interface PurchaseConfirmationEmailProps {
     firstName: string;
     downloadUrl: string;
-    receiptUrl: string;
   }
   
   export default function PurchaseConfirmationEmail({
     firstName,
     downloadUrl,
-    receiptUrl,
   }: PurchaseConfirmationEmailProps) {
     return (
       <Html lang="en">

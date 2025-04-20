@@ -53,10 +53,13 @@
 
 // "use client";
 
+import OrderActions from "@/components/order-confirmation";
 import { Button } from "@/components/ui/button";
 import db from "@/db/db";
-import { getUserOrders } from "@/server/client/getUserOrser";
+import { getUserOrders, OrderWithProduct } from "@/server/client/getUserOrser";
+import { sendConfirmationEmail } from "@/server/client/sendLink";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { Resend } from "resend";
 
 // export const mockOrders = [
 //   {
@@ -146,14 +149,22 @@ export default async function MyOrdersPage() {
 
   const orders = await getUserOrders(userId);
 
-  const handleSend = (orderId: string) => {
-    // startTransition(async () => {
-    //   const res = await emailOrderHistory({ orderId })
-    //   setStatus((prev) => ({
-    //     ...prev,
-    //     [orderId]: res?.message || "Email sent!",
-    //   }))
-    // });
+  const handleSend = async (order: OrderWithProduct) => {
+    try {
+      const result = await sendConfirmationEmail({
+        customerEmail: order.email,
+        firstName: "BookWorm",
+        downloadUrl: order.product.filePath,
+      });
+  
+      if (result.success) {
+        console.log("Email sent successfully!");
+      } else {
+        console.error("Failed to send email:", result.error);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
   };
 
   return (
@@ -184,12 +195,7 @@ export default async function MyOrdersPage() {
               </div>
             </div>
             <div className="flex flex-col items-start md:items-end gap-1">
-              <Button
-                variant="outline"
-                className="rounded-2xl ml-1 tracking-normal bg-blue-500 hover:bg-blue-600 transition-transform group-hover:translate-x-0.5 text-white"
-              >
-                <span className="text-white">Send Link</span>
-              </Button>
+              <OrderActions order={order} />
 
               {/* <p className="text-xs text-green-600">status</p> */}
             </div>
