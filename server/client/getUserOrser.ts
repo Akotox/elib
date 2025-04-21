@@ -27,12 +27,15 @@ export interface OrderWithProduct {
 export async function getUserOrders(userId: string): Promise<OrderWithProduct[]> {
   try {
     const orders = await db.order.findMany({
-        where: {
-            userId: userId,
-        },
-        include: {
-            product: true,
-        }
+      where: {
+        userId: userId,
+      },
+      include: {
+        product: true,
+      },
+      orderBy: {
+        createdAt: 'desc', // This assumes you have a 'createdAt' field
+      },
     });
 
     return orders;

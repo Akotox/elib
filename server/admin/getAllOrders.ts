@@ -10,6 +10,9 @@ export async function getAllOrders(): Promise<OrderWithProduct[]> {
       include: {
         product: true,
       },
+      orderBy: {
+        createdAt: "desc", // This assumes you have a 'createdAt' field
+      },
     });
     return orders;
   } catch (error) {
