@@ -1,4 +1,5 @@
 "use client";
+import { formatCurrency } from "@/lib/formatters";
 import { Button } from "./ui/button";
 
 type CheckoutButtonProps = {
@@ -7,7 +8,7 @@ type CheckoutButtonProps = {
   priceInCents: number;
 };
 
-export function CheckoutButton({ productId, priceId }: CheckoutButtonProps) {
+export function CheckoutButton({ productId, priceId, priceInCents }: CheckoutButtonProps) {
   
   const handlePurchase = async () => {
     // const user = await currentUser()
@@ -32,11 +33,11 @@ export function CheckoutButton({ productId, priceId }: CheckoutButtonProps) {
   return (
     <Button
       variant="outline"
-      className="w-full rounded-2xl ml-1 tracking-normal bg-black text-white hover:bg-blue-600 transition-colors duration-300"
+      className="w-full rounded-2xl ml-1 tracking-normal bg-black text-white hover:bg-blue-600 hover:text-white transition-colors duration-300"
       onClick={handlePurchase}
       disabled={!priceId}
     >
-      <span>Purchase </span>
+      <span>Purchase {formatCurrency(priceInCents/100)}</span>
     </Button>
   );
 }
